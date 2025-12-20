@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common'
+import { ProjectRequestDto } from './projects.dto'
 
 @Injectable()
 export class ProjectsService {
@@ -10,11 +11,11 @@ export class ProjectsService {
     return `This action returns a #${id} project`
   }
 
-  create(data: any) {
+  create(data: ProjectRequestDto) {
     return data
   }
 
-  update(id: string, data: any) {
+  update(id: string, data: ProjectRequestDto) {
     return { id, ...data }
   }
 
