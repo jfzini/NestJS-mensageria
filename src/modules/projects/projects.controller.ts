@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   HttpCode,
+  HttpException,
   HttpStatus,
   Param,
   ParseUUIDPipe,
@@ -29,8 +30,12 @@ export class ProjectsController {
 
   @Get(':id')
   @ApiResponse({ status: HttpStatus.OK, type: ProjectListItemDTO })
-  findById(@Param('id', ParseUUIDPipe) id: string) {
-    return this.projectsService.findById(id)
+  async findById(@Param('id', ParseUUIDPipe) id: string) {
+    const foundProject = await this.projectsService.findById(id)
+    if (!foundProject) {
+      throw new HttpException('Project not found', HttpStatus.NOT_FOUND)
+    }
+    return foundProject
   }
 
   @Post()
@@ -41,14 +46,22 @@ export class ProjectsController {
 
   @Put(':id')
   @ApiResponse({ status: HttpStatus.OK, type: ProjectListItemDTO })
-  update(@Param('id', ParseUUIDPipe) id: string, @Body() data: ProjectRequestDto) {
+  async update(@Param('id', ParseUUIDPipe) id: string, @Body() data: ProjectRequestDto) {
+    const foundProject = await this.projectsService.findById(id)
+    if (!foundProject) {
+      throw new HttpException('Project not found', HttpStatus.NOT_FOUND)
+    }
     return this.projectsService.update(id, data)
   }
 
   @Delete(':id')
   @ApiResponse({ status: HttpStatus.NO_CONTENT })
   @HttpCode(HttpStatus.NO_CONTENT)
-  remove(@Param('id', ParseUUIDPipe) id: string) {
+  async remove(@Param('id', ParseUUIDPipe) id: string) {
+    const foundProject = await this.projectsService.findById(id)
+    if (!foundProject) {
+      throw new HttpException('Project not found', HttpStatus.NOT_FOUND)
+    }
     return this.projectsService.remove(id)
   }
 }
