@@ -27,14 +27,6 @@ export class TaskRequestDTO {
   @IsOptional()
   @ApiProperty({ description: 'Due date of the task', example: '2025-12-20T16:27:09.000Z' })
   dueDate: string
-
-  @IsString()
-  @IsNotEmpty()
-  @ApiProperty({
-    description: 'ID of the project',
-    example: '123e4567-e89b-12d3-a456-426614174000',
-  })
-  projectId: string
 }
 
 export class TaskListItemDTO {
