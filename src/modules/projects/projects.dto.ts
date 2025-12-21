@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { IsNotEmpty, IsString } from 'class-validator'
+import { IsNotEmpty, IsOptional, IsString } from 'class-validator'
 
 export class ProjectRequestDto {
   @ApiProperty({ description: 'Name of the project', example: 'Project 1' })
@@ -13,7 +13,8 @@ export class ProjectRequestDto {
     required: false,
   })
   @IsString()
-  description: string
+  @IsOptional()
+  description?: string
 }
 
 export class ProjectListItemDTO {
