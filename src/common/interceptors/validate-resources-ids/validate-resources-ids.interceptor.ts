@@ -31,7 +31,7 @@ export class ValidateResourcesIdsInterceptor implements NestInterceptor {
 
     // Valida o ProjectId
     const request = context.switchToHttp().getRequest()
-    const projectId = request.params.id
+    const { projectId } = request.params
 
     const project = await this.prisma.project.findUnique({ where: { id: projectId } })
     if (!project) {
