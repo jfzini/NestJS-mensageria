@@ -34,8 +34,8 @@ export class ProjectsController {
   @Get(':projectId')
   @ValidateResourcesIds()
   @ApiResponse({ status: HttpStatus.OK, type: ProjectListItemDTO })
-  async findById(@Param('projectId', ParseUUIDPipe) id: string) {
-    return this.projectsService.findById(id)
+  async findById(@Param('projectId', ParseUUIDPipe) projectId: string) {
+    return this.projectsService.findById(projectId)
   }
 
   @Post()
@@ -47,15 +47,18 @@ export class ProjectsController {
   @Put(':projectId')
   @ApiResponse({ status: HttpStatus.OK, type: ProjectListItemDTO })
   @ValidateResourcesIds()
-  async update(@Param('projectId', ParseUUIDPipe) id: string, @Body() data: ProjectRequestDto) {
-    return this.projectsService.update(id, data)
+  async update(
+    @Param('projectId', ParseUUIDPipe) projectId: string,
+    @Body() data: ProjectRequestDto,
+  ) {
+    return this.projectsService.update(projectId, data)
   }
 
   @Delete(':projectId')
   @ApiResponse({ status: HttpStatus.NO_CONTENT })
   @HttpCode(HttpStatus.NO_CONTENT)
   @ValidateResourcesIds()
-  async remove(@Param('projectId', ParseUUIDPipe) id: string) {
-    return this.projectsService.remove(id)
+  async remove(@Param('projectId', ParseUUIDPipe) projectId: string) {
+    return this.projectsService.remove(projectId)
   }
 }

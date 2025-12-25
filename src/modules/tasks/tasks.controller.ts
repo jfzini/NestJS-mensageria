@@ -32,14 +32,14 @@ export class TasksController {
     return this.tasksService.findAllByProjectId(projectId)
   }
 
-  @Get(':id')
+  @Get(':taskId')
   @ApiResponse({ status: HttpStatus.OK, type: TaskListItemDTO })
   @ValidateResourcesIds()
   async findById(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('taskId', ParseUUIDPipe) taskId: string,
     @Param('projectId', ParseUUIDPipe) projectId: string,
   ) {
-    return this.tasksService.findById(id, projectId)
+    return this.tasksService.findById(taskId, projectId)
   }
 
   @Post()
@@ -49,25 +49,25 @@ export class TasksController {
     return this.tasksService.create(projectId, data)
   }
 
-  @Put(':id')
+  @Put(':taskId')
   @ApiResponse({ status: HttpStatus.OK, type: TaskListItemDTO })
   @ValidateResourcesIds()
   async update(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('taskId', ParseUUIDPipe) taskId: string,
     @Param('projectId', ParseUUIDPipe) projectId: string,
     @Body() data: TaskRequestDTO,
   ) {
-    return this.tasksService.update(id, projectId, data)
+    return this.tasksService.update(taskId, projectId, data)
   }
 
-  @Delete(':id')
+  @Delete(':taskId')
   @ApiResponse({ status: HttpStatus.NO_CONTENT })
   @HttpCode(HttpStatus.NO_CONTENT)
   @ValidateResourcesIds()
   async delete(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('taskId', ParseUUIDPipe) taskId: string,
     @Param('projectId', ParseUUIDPipe) projectId: string,
   ) {
-    return this.tasksService.remove(id, projectId)
+    return this.tasksService.remove(taskId, projectId)
   }
 }
