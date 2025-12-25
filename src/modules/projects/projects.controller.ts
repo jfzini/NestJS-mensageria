@@ -31,10 +31,10 @@ export class ProjectsController {
     return this.projectsService.findAll()
   }
 
-  @Get(':id')
+  @Get(':projectId')
   @ValidateResourcesIds()
   @ApiResponse({ status: HttpStatus.OK, type: ProjectListItemDTO })
-  async findById(@Param('id', ParseUUIDPipe) id: string) {
+  async findById(@Param('projectId', ParseUUIDPipe) id: string) {
     return this.projectsService.findById(id)
   }
 
@@ -44,18 +44,18 @@ export class ProjectsController {
     return this.projectsService.create(data)
   }
 
-  @Put(':id')
+  @Put(':projectId')
   @ApiResponse({ status: HttpStatus.OK, type: ProjectListItemDTO })
   @ValidateResourcesIds()
-  async update(@Param('id', ParseUUIDPipe) id: string, @Body() data: ProjectRequestDto) {
+  async update(@Param('projectId', ParseUUIDPipe) id: string, @Body() data: ProjectRequestDto) {
     return this.projectsService.update(id, data)
   }
 
-  @Delete(':id')
+  @Delete(':projectId')
   @ApiResponse({ status: HttpStatus.NO_CONTENT })
   @HttpCode(HttpStatus.NO_CONTENT)
   @ValidateResourcesIds()
-  async remove(@Param('id', ParseUUIDPipe) id: string) {
+  async remove(@Param('projectId', ParseUUIDPipe) id: string) {
     return this.projectsService.remove(id)
   }
 }
