@@ -7,14 +7,38 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum UserRole {
+  ADMIN
+  USER
+}
+
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  password  String
+  avatar    String?
+  role      UserRole @default(USER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  createdProjects Project[]             @relation("UserProjects")
+  assignedTasks   Task[]                @relation("UserTasks")
+  comments        Comment[]
+  collaborations  ProjectCollaborator[]
+}
+
 model Project {
   id          String   @id @default(uuid())
   name        String
   description String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  createdById String
 
-  tasks Task[]
+  tasks         Task[]
+  createdBy     User                  @relation("UserProjects", fields: [createdById], references: [id])
+  collaborators ProjectCollaborator[]
 }
 
 enum TaskStatus {
@@ -38,7 +62,42 @@ model Task {
   dueDate     DateTime?
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
+  projectId   String
+  assigneeId  String?
 
-  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  project  Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  assignee User?     @relation("UserTasks", fields: [assigneeId], references: [id])
+  comments Comment[]
+}
+
+model Comment {
+  id        String   @id @default(uuid())
+  content   String
+  authorId  String
+  taskId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  task   Task @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  author User @relation(fields: [authorId], references: [id])
+}
+
+enum ProjectCollaboratorRole {
+  VIEWER
+  EDITOR
+  OWNER
+}
+
+model ProjectCollaborator {
+  id        String                  @id @default(uuid())
   projectId String
+  userId    String
+  role      ProjectCollaboratorRole @default(EDITOR)
+  createdAt DateTime                @default(now())
+  updatedAt DateTime                @updatedAt
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [userId], references: [id])
+
+  @@unique([projectId, userId])
 }

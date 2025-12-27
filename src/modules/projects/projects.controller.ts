@@ -14,7 +14,7 @@ import {
 import { ApiResponse } from '@nestjs/swagger'
 import { ValidateResourcesIds } from 'src/common/decorators/validate-resources-ids.decorator'
 import { ValidateResourcesIdsInterceptor } from 'src/common/interceptors/validate-resources-ids/validate-resources-ids.interceptor'
-import { ProjectListItemDTO, ProjectRequestDto } from './projects.dto'
+import { ProjectListItemDTO, ProjectRequestDto, ProjectWithTasksDTO } from './projects.dto'
 import { ProjectsService } from './projects.service'
 
 @Controller({
@@ -33,7 +33,7 @@ export class ProjectsController {
 
   @Get(':projectId')
   @ValidateResourcesIds()
-  @ApiResponse({ status: HttpStatus.OK, type: ProjectListItemDTO })
+  @ApiResponse({ status: HttpStatus.OK, type: ProjectWithTasksDTO })
   async findById(@Param('projectId', ParseUUIDPipe) projectId: string) {
     return this.projectsService.findById(projectId)
   }

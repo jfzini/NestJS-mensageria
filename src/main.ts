@@ -1,6 +1,7 @@
 import { ValidationPipe, VersioningType } from '@nestjs/common'
 import { NestFactory } from '@nestjs/core'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
+import { writeFileSync } from 'fs'
 import { AppModule } from './app.module'
 
 async function bootstrap() {
@@ -21,6 +22,8 @@ async function bootstrap() {
 
   const document = SwaggerModule.createDocument(app, config)
   SwaggerModule.setup('docs', app, document)
+
+  writeFileSync('swagger.json', JSON.stringify(document, null, 2))
 
   // Set up global validation pipes
   app.useGlobalPipes(
