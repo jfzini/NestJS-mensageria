@@ -10,8 +10,23 @@ export class ProjectsService {
     return this.prisma.project.findMany()
   }
 
-  findById(id: string) {
-    return this.prisma.project.findUnique({ where: { id } })
+  async findById(id: string) {
+    const project = await this.prisma.project.findUnique({
+      where: { id },
+      select: {
+        id: true,
+        name: true,
+        description: true,
+        createdAt: true,
+        updatedAt: true,
+        tasks: {
+          omit: {
+            projectId: true,
+          },
+        },
+      },
+    })
+    return project
   }
 
   create(data: ProjectRequestDto) {
