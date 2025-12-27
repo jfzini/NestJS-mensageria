@@ -42,7 +42,7 @@ export class ValidateResourcesIdsInterceptor implements NestInterceptor {
     const { taskId } = request.params
     if (taskId) {
       const task = await this.prisma.task.findUnique({ where: { id: taskId } })
-      if (!task) {
+      if (!task || task.projectId !== projectId) {
         throw new HttpException('Task not found', HttpStatus.NOT_FOUND)
       }
     }
