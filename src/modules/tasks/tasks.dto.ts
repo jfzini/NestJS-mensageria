@@ -59,10 +59,10 @@ export class TaskListItemDTO {
   @ApiProperty({ description: 'Description of the task', example: 'This task is about...' })
   description: string
 
-  @ApiProperty({ description: 'Status of the task', example: 'TODO' })
+  @ApiProperty({ description: 'Status of the task', example: 'TODO', enum: TaskStatus })
   status: TaskStatus
 
-  @ApiProperty({ description: 'Priority of the task', example: 'MEDIUM' })
+  @ApiProperty({ description: 'Priority of the task', example: 'MEDIUM', enum: TaskPriority })
   priority: TaskPriority
 
   @ApiProperty({ description: 'Due date of the task', example: '2025-12-20T16:27:09.000Z' })
