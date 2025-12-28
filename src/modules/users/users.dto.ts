@@ -52,3 +52,15 @@ export class ListUserDto {
   @ApiProperty({ example: '2025-12-20T16:27:09.000Z' })
   updatedAt: Date
 }
+
+export class ChangePasswordRequestDto {
+  @IsString()
+  @IsNotEmpty()
+  @ApiProperty({ example: 'password' })
+  oldPassword: string
+
+  @IsString()
+  @IsNotEmpty()
+  @ApiProperty({ example: 'password' })
+  newPassword: string
+}

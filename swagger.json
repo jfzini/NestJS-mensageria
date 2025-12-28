@@ -382,6 +382,35 @@
         "tags": [
           "Users"
         ]
+      },
+      "post": {
+        "operationId": "UsersController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateUserRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListUserDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Users"
+        ]
       }
     },
     "/users/{id}": {
@@ -427,6 +456,46 @@
             }
           }
         ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListUserDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/users/change-password/{id}": {
+      "patch": {
+        "operationId": "UsersController_changePassword",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangePasswordRequestDto"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "",
@@ -729,6 +798,58 @@
           "role",
           "createdAt",
           "updatedAt"
+        ]
+      },
+      "CreateUserRequestDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "John Doe"
+          },
+          "email": {
+            "type": "string",
+            "example": "john.doe@example.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "password"
+          },
+          "avatar": {
+            "type": "string",
+            "example": "avatar.jpg"
+          },
+          "role": {
+            "type": "string",
+            "example": "USER",
+            "enum": [
+              "ADMIN",
+              "USER"
+            ],
+            "default": "USER"
+          }
+        },
+        "required": [
+          "name",
+          "email",
+          "password"
+        ]
+      },
+      "ChangePasswordRequestDto": {
+        "type": "object",
+        "properties": {
+          "oldPassword": {
+            "type": "string",
+            "example": "password"
+          },
+          "newPassword": {
+            "type": "string",
+            "example": "password"
+          }
+        },
+        "required": [
+          "oldPassword",
+          "newPassword"
         ]
       }
     }
