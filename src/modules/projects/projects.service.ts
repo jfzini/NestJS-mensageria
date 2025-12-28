@@ -30,7 +30,9 @@ export class ProjectsService {
   }
 
   create(data: ProjectRequestDto) {
-    return this.prisma.project.create({ data })
+    return this.prisma.project.create({
+      data: { ...data, createdById: '12cdba13-c2c0-4349-9b90-afe7ddbce580' }, // TODO: change this to the actual user id
+    })
   }
 
   update(id: string, data: ProjectRequestDto) {
