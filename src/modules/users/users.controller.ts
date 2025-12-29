@@ -1,21 +1,14 @@
-import {
-  Body,
-  Controller,
-  Get,
-  HttpException,
-  HttpStatus,
-  Param,
-  Patch,
-  Post,
-  UseInterceptors,
-} from '@nestjs/common'
+import { Body, Controller, Get, Param, Patch, Post, UseInterceptors } from '@nestjs/common'
 import { ApiResponse } from '@nestjs/swagger'
 import { ValidateExistingUser } from 'src/common/decorators/validate-existing-user.decorator'
 import { ValidateExistingUserInterceptor } from 'src/common/interceptors/validate-existing-user/validate-existing-user.interceptor'
 import { ChangePasswordRequestDto, CreateUserRequestDto, ListUserDto } from './users.dto'
 import { UsersService } from './users.service'
 
-@Controller('users')
+@Controller({
+  path: 'users',
+  version: '1',
+})
 @UseInterceptors(ValidateExistingUserInterceptor)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
@@ -43,10 +36,6 @@ export class UsersController {
   @Post()
   @ApiResponse({ status: 201, type: ListUserDto })
   async create(@Body() data: CreateUserRequestDto) {
-    const userAlreadyExists = await this.usersService.findByEmail(data.email)
-    if (userAlreadyExists) {
-      throw new HttpException('User already exists', HttpStatus.BAD_REQUEST)
-    }
     return this.usersService.create(data)
   }
 

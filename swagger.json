@@ -360,9 +360,9 @@
         ]
       }
     },
-    "/users": {
+    "/v1/users": {
       "get": {
-        "operationId": "UsersController_findAll",
+        "operationId": "UsersController_findAll_v1",
         "parameters": [],
         "responses": {
           "200": {
@@ -384,7 +384,7 @@
         ]
       },
       "post": {
-        "operationId": "UsersController_create",
+        "operationId": "UsersController_create_v1",
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -413,9 +413,9 @@
         ]
       }
     },
-    "/users/{id}": {
+    "/v1/users/{id}": {
       "get": {
-        "operationId": "UsersController_findById",
+        "operationId": "UsersController_findById_v1",
         "parameters": [
           {
             "name": "id",
@@ -443,9 +443,9 @@
         ]
       }
     },
-    "/users/email/{email}": {
+    "/v1/users/email/{email}": {
       "get": {
-        "operationId": "UsersController_findByEmail",
+        "operationId": "UsersController_findByEmail_v1",
         "parameters": [
           {
             "name": "email",
@@ -473,9 +473,9 @@
         ]
       }
     },
-    "/users/change-password/{id}": {
+    "/v1/users/change-password/{id}": {
       "patch": {
-        "operationId": "UsersController_changePassword",
+        "operationId": "UsersController_changePassword_v1",
         "parameters": [
           {
             "name": "id",

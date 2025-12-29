@@ -21,6 +21,10 @@ export class UsersService {
   }
 
   async create(data: CreateUserRequestDto) {
+    const userAlreadyExists = await this.prisma.user.findUnique({ where: { email: data.email } })
+    if (userAlreadyExists) {
+      throw new HttpException('User already exists', HttpStatus.CONFLICT)
+    }
     const passwordHash = await bcrypt.hash(data.password, 10)
     data.password = passwordHash
     return this.prisma.user.create({ data, omit: { password: true } })
