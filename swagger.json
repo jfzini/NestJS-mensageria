@@ -512,6 +512,29 @@
           "Users"
         ]
       }
+    },
+    "/v1/users/deactivate/{id}": {
+      "delete": {
+        "operationId": "UsersController_softDelete_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Users"
+        ]
+      }
     }
   },
   "info": {
@@ -780,6 +803,10 @@
             ],
             "default": "USER"
           },
+          "active": {
+            "type": "boolean",
+            "example": true
+          },
           "createdAt": {
             "format": "date-time",
             "type": "string",
@@ -796,6 +823,7 @@
           "name",
           "email",
           "role",
+          "active",
           "createdAt",
           "updatedAt"
         ]

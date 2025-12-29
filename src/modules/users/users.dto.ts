@@ -46,6 +46,9 @@ export class ListUserDto {
   @ApiProperty({ example: 'USER', enum: UserRole, default: UserRole.USER })
   role: UserRole
 
+  @ApiProperty({ example: true })
+  active: boolean
+
   @ApiProperty({ example: '2025-12-20T16:27:09.000Z' })
   createdAt: Date
 

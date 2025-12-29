@@ -47,4 +47,11 @@ export class UsersService {
       omit: { password: true },
     })
   }
+
+  async softDelete(id: string) {
+    return this.prisma.user.update({
+      where: { id },
+      data: { active: false },
+    })
+  }
 }

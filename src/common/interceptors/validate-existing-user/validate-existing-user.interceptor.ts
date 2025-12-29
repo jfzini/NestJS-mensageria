@@ -37,6 +37,10 @@ export class ValidateExistingUserInterceptor implements NestInterceptor {
         if (!user) {
           throw new HttpException('User not found', HttpStatus.NOT_FOUND)
         }
+
+        if (!user.active) {
+          throw new HttpException('User is not active', HttpStatus.FORBIDDEN)
+        }
         break
       }
 
@@ -44,6 +48,10 @@ export class ValidateExistingUserInterceptor implements NestInterceptor {
         const user = await this.prisma.user.findUnique({ where: { email } })
         if (!user) {
           throw new HttpException('User not found', HttpStatus.NOT_FOUND)
+        }
+
+        if (!user.active) {
+          throw new HttpException('User is not active', HttpStatus.FORBIDDEN)
         }
         break
       }
