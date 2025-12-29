@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Param, Patch, Post, UseInterceptors } from '@nestjs/common'
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseUUIDPipe,
+  Patch,
+  Post,
+  UseInterceptors,
+} from '@nestjs/common'
 import { ApiResponse } from '@nestjs/swagger'
 import { ValidateExistingUser } from 'src/common/decorators/validate-existing-user.decorator'
 import { ValidateExistingUserInterceptor } from 'src/common/interceptors/validate-existing-user/validate-existing-user.interceptor'
@@ -22,7 +31,7 @@ export class UsersController {
   @ApiResponse({ status: 200, type: ListUserDto })
   @Get(':id')
   @ValidateExistingUser('id')
-  async findById(@Param('id') id: string) {
+  async findById(@Param('id', ParseUUIDPipe) id: string) {
     return this.usersService.findById(id)
   }
 
@@ -42,7 +51,10 @@ export class UsersController {
   @ApiResponse({ status: 200, type: ListUserDto })
   @Patch('change-password/:id')
   @ValidateExistingUser('id')
-  async changePassword(@Param('id') id: string, @Body() data: ChangePasswordRequestDto) {
+  async changePassword(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() data: ChangePasswordRequestDto,
+  ) {
     return this.usersService.changePassword(id, data.oldPassword, data.newPassword)
   }
 }
