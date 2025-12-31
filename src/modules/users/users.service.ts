@@ -13,11 +13,19 @@ export class UsersService {
   }
 
   async findById(id: string) {
-    return this.prisma.user.findUnique({ where: { id }, omit: { password: true } })
+    return this.prisma.user.findUnique({
+      where: { id },
+      omit: { password: true },
+      include: { assignedTasks: true, collaborations: true, createdProjects: true },
+    })
   }
 
   async findByEmail(email: string) {
-    return this.prisma.user.findUnique({ where: { email }, omit: { password: true } })
+    return this.prisma.user.findUnique({
+      where: { email },
+      omit: { password: true },
+      include: { assignedTasks: true, collaborations: true, createdProjects: true },
+    })
   }
 
   async create(data: CreateUserRequestDto) {
