@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { UserRole } from '@prisma/client'
-import { IsEmail, IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator'
+import { IsEmail, IsEnum, IsInt, IsNotEmpty, IsOptional, IsString } from 'class-validator'
 
 export class CreateUserRequestDto {
   @IsString()
@@ -66,4 +66,17 @@ export class ChangePasswordRequestDto {
   @IsNotEmpty()
   @ApiProperty({ example: 'password' })
   newPassword: string
+}
+
+export class ListAllUsersDto {
+  @ApiProperty({ type: [ListUserDto] })
+  users: ListUserDto[]
+
+  @ApiProperty({ example: 1 })
+  @IsInt()
+  count: number
+
+  @ApiProperty({ example: 1 })
+  @IsInt()
+  totalPages: number
 }
