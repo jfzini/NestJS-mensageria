@@ -8,15 +8,32 @@ import { CreateUserRequestDto } from './users.dto'
 export class UsersService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async findAll() {
-    return this.prisma.user.findMany({ omit: { password: true } })
+  async findAll(page = 1, limit = 10) {
+    const users = await this.prisma.user.findMany({
+      skip: (page - 1) * limit,
+      take: limit,
+      orderBy: { createdAt: 'desc' },
+      omit: { password: true },
+      include: {
+        assignedTasks: { omit: { assigneeId: true } },
+        collaborations: { omit: { userId: true } },
+        createdProjects: { omit: { createdById: true } },
+      },
+    })
+    const count = await this.prisma.user.count()
+    const totalPages = Math.ceil(count / limit)
+    return { users, count, totalPages }
   }
 
   async findById(id: string) {
     return this.prisma.user.findUnique({
       where: { id },
       omit: { password: true },
-      include: { assignedTasks: true, collaborations: true, createdProjects: true },
+      include: {
+        assignedTasks: { omit: { assigneeId: true } },
+        collaborations: { omit: { userId: true } },
+        createdProjects: { omit: { createdById: true } },
+      },
     })
   }
 
@@ -24,7 +41,11 @@ export class UsersService {
     return this.prisma.user.findUnique({
       where: { email },
       omit: { password: true },
-      include: { assignedTasks: true, collaborations: true, createdProjects: true },
+      include: {
+        assignedTasks: { omit: { assigneeId: true } },
+        collaborations: { omit: { userId: true } },
+        createdProjects: { omit: { createdById: true } },
+      },
     })
   }
 

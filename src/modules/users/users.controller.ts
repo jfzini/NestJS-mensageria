@@ -6,9 +6,11 @@ import {
   HttpCode,
   HttpStatus,
   Param,
+  ParseIntPipe,
   ParseUUIDPipe,
   Patch,
   Post,
+  Query,
   UseInterceptors,
 } from '@nestjs/common'
 import { ApiResponse } from '@nestjs/swagger'
@@ -27,8 +29,11 @@ export class UsersController {
 
   @Get()
   @ApiResponse({ status: HttpStatus.OK, type: [ListUserDto] })
-  async findAll() {
-    return this.usersService.findAll()
+  async findAll(
+    @Query('page', new ParseIntPipe({ optional: true })) page: number,
+    @Query('limit', new ParseIntPipe({ optional: true })) limit: number,
+  ) {
+    return this.usersService.findAll(page, limit)
   }
 
   @ApiResponse({ status: HttpStatus.OK, type: ListUserDto })
