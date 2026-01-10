@@ -1,45 +1,28 @@
 import { Injectable } from '@nestjs/common'
-import { PrismaService } from 'src/prisma.service'
 import { ProjectRequestDto } from './projects.dto'
+import { ProjectsRepository } from './projects.repository'
 
 @Injectable()
 export class ProjectsService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly projectRepository: ProjectsRepository) {}
 
   findAll() {
-    return this.prisma.project.findMany()
+    return this.projectRepository.findAll()
   }
 
   async findById(id: string) {
-    const project = await this.prisma.project.findUnique({
-      where: { id },
-      select: {
-        id: true,
-        name: true,
-        description: true,
-        createdAt: true,
-        updatedAt: true,
-        tasks: {
-          omit: {
-            projectId: true,
-          },
-        },
-      },
-    })
-    return project
+    return this.projectRepository.findById(id)
   }
 
   create(data: ProjectRequestDto) {
-    return this.prisma.project.create({
-      data: { ...data, createdById: '12cdba13-c2c0-4349-9b90-afe7ddbce580' }, // TODO: change this to the actual user id
-    })
+    return this.projectRepository.create(data)
   }
 
   update(id: string, data: ProjectRequestDto) {
-    return this.prisma.project.update({ where: { id }, data })
+    return this.projectRepository.update(id, data)
   }
 
   remove(id: string) {
-    return this.prisma.project.delete({ where: { id } })
+    return this.projectRepository.remove(id)
   }
 }
