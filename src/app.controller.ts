@@ -63,6 +63,14 @@ export class AppController {
     //   throw new UnauthorizedException('Invalid Linear signature')
     // }
     const result = timingSafeEqual(headerSignature, computedSignature)
+    console.log({
+      result,
+      headerSignature,
+      computedSignature,
+      rawBody,
+      signature,
+    })
+
     return {
       result,
       headerSignature,
