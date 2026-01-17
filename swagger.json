@@ -34,6 +34,20 @@
         ]
       }
     },
+    "/v1/linear-listener": {
+      "post": {
+        "operationId": "AppController_getRawBody_v1",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "App"
+        ]
+      }
+    },
     "/v1/projects": {
       "get": {
         "operationId": "ProjectsController_findAll_v1",
