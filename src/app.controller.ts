@@ -69,7 +69,7 @@ export class AppController {
       computedSignature,
       rawBody,
       signature,
-      body: request.body,
+      body: JSON.stringify(request.body),
     })
 
     return {
