@@ -1,86 +1,54 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common'
-import { User } from '@prisma/client'
 import bcrypt from 'bcrypt'
-import { PrismaService } from 'src/prisma.service'
 import { CreateUserRequestDto } from './users.dto'
+import { UsersRepository } from './users.repository'
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly usersRepository: UsersRepository) {}
 
   async findAll(page = 1, limit = 10) {
-    const users = await this.prisma.user.findMany({
-      skip: (page - 1) * limit,
-      take: limit,
-      orderBy: { createdAt: 'desc' },
-      omit: { password: true },
-      include: {
-        assignedTasks: { omit: { assigneeId: true } },
-        collaborations: { omit: { userId: true } },
-        createdProjects: { omit: { createdById: true } },
-      },
-    })
-    const count = await this.prisma.user.count()
+    const skip = (page - 1) * limit
+    const users = await this.usersRepository.findAll(skip, limit)
+    const count = await this.usersRepository.count()
     const totalPages = Math.ceil(count / limit)
     return { users, count, totalPages }
   }
 
   async findById(id: string) {
-    return this.prisma.user.findUnique({
-      where: { id },
-      omit: { password: true },
-      include: {
-        assignedTasks: { omit: { assigneeId: true } },
-        collaborations: { omit: { userId: true } },
-        createdProjects: { omit: { createdById: true } },
-      },
-    })
+    return this.usersRepository.findById(id)
   }
 
   async findByEmail(email: string) {
-    return this.prisma.user.findUnique({
-      where: { email },
-      omit: { password: true },
-      include: {
-        assignedTasks: { omit: { assigneeId: true } },
-        collaborations: { omit: { userId: true } },
-        createdProjects: { omit: { createdById: true } },
-      },
-    })
+    return this.usersRepository.findByEmail(email)
   }
 
   async create(data: CreateUserRequestDto) {
-    const userAlreadyExists = await this.prisma.user.findUnique({ where: { email: data.email } })
+    const userAlreadyExists = await this.usersRepository.findByEmail(data.email)
     if (userAlreadyExists) {
       throw new HttpException('User already exists', HttpStatus.CONFLICT)
     }
     const passwordHash = await bcrypt.hash(data.password, 10)
     data.password = passwordHash
-    return this.prisma.user.create({ data, omit: { password: true } })
+    return this.usersRepository.create(data)
   }
 
   async changePassword(id: string, oldPassword: string, newPassword: string) {
-    const user = (await this.prisma.user.findUnique({
-      where: { id },
-      select: { password: true },
-    })) as User
+    const user = await this.usersRepository.findPasswordById(id)
+
+    if (!user) {
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND)
+    }
 
     const isPasswordValid = await bcrypt.compare(oldPassword, user.password)
     if (!isPasswordValid) {
       throw new HttpException('Current password is invalid', HttpStatus.BAD_REQUEST)
     }
     const passwordHash = await bcrypt.hash(newPassword, 10)
-    return this.prisma.user.update({
-      where: { id },
-      data: { password: passwordHash },
-      omit: { password: true },
-    })
+    return this.usersRepository.updatePassword(id, passwordHash)
   }
 
   async softDelete(id: string) {
-    return this.prisma.user.update({
-      where: { id },
-      data: { active: false },
-    })
+    return this.usersRepository.softDelete(id)
   }
 }

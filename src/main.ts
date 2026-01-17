@@ -6,7 +6,9 @@ import { AppModule } from './app.module'
 
 async function bootstrap() {
   // Create the NestJS application instance
-  const app = await NestFactory.create(AppModule)
+  const app = await NestFactory.create(AppModule, {
+    rawBody: true,
+  })
 
   // Enable URI versioning
   app.enableVersioning({
